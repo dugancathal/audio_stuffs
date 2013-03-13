@@ -15,3 +15,9 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
+
+*.swp ### VIM swap file
+
+### Project Specific ###
+*.mp3
+*.flac
