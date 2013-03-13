@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require 'audio_stuffs'
+require 'find'
+
+def args_valid?
+  ARGV.size >= 1
+end
+
+unless args_valid?
+  puts USAGE
+  exit 1
+end
+
+ARGV.each do |check_dir|
+  Find.find(check_dir) do |path|
+    next unless File.directory?(path)
+
+    cdda_dir = AudioStuffs::CddaDir.new(path)
+    if cdda_dir.valid?
+      cdda_dir.metadata_files.each do |file|
+        cdda_file = AudioStuffs::CddaFile.from_file(file)
+        cdda_file.songs.each do |cdda_song|
+          cdda_song.update_comment! cdda_file.analyses[cdda_song.name]
+        end
+      end
+    end
+  end
+end
