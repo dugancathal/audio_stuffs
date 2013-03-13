@@ -22,6 +22,11 @@ describe AudioStuffs::CddaFile do
     aucdtect_file.analyses.should be_a_kind_of(Hash)
   end
 
+  it 'returns CddaSong objects when asked for #songs' do
+    audiochecker_file.songs.should be_a_kind_of(Array)
+    audiochecker_file.songs.first.should be_a_kind_of(AudioStuffs::CddaSong)
+  end
+
   context 'the audiochecker file' do
     it 'has 11 songs' do
       audiochecker_file.analyses.should have(11).items

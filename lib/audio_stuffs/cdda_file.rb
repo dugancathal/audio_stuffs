@@ -2,7 +2,8 @@ module AudioStuffs
   class CddaFile
     attr_reader :text
     def initialize(filename)
-      @text = Pathname(filename).read
+      @file = Pathname(filename)
+      @text = @file.read
       decode(@text)
     end
 
@@ -19,9 +20,13 @@ module AudioStuffs
       return @analyses if @analyses
       @analyses = {}
       @text.scan(song_analysis_regex).map do |match|
-        @analyses[match[0]] = match[1] 
+        @analyses[match[0]] = match[1]
       end
       @analyses
+    end
+
+    def songs
+      analyses.map {|name, analysis| CddaSong.new name, analysis }
     end
 
     private
