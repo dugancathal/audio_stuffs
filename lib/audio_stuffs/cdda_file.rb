@@ -26,7 +26,7 @@ module AudioStuffs
     end
 
     def songs
-      @songs ||= analyses.map {|name, analysis| CddaSong.new File.join(@file.dirname.to_s, name), analysis.encode('UTF-8') }
+      @songs ||= analyses.map {|name, analysis| CddaSong.from_file File.join(@file.dirname.to_s, name), analysis.encode('UTF-8') }
     end
 
     private

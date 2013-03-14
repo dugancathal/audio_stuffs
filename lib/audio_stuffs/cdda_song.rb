@@ -4,24 +4,44 @@ module AudioStuffs
     def initialize(path, analysis = '0%')
       @path = Pathname(path)
       @analysis = analysis
+      @encoding = 'UTF-8'
+    end
+
+    def self.from_file(filename, analysis = '0%')
+      filetype = File.extname(filename.to_s).match(/\.(.*)/)[1]
+      klass = "#{filetype.capitalize}Song"
+      AudioStuffs.const_get(klass).new filename, analysis
+    rescue NameError
+      STDERR.puts "Unable to process #{filename}.  Unknown filetype."
     end
 
     def name
-      @path.basename.to_s.encode 'UTF-8', 'UTF-8', invalid: :replace
+      @path.basename.to_s.encode @encoding, @encoding, invalid: :replace
     rescue ArgumentError
-      @path.basename.to_s.encode 'UTF-16LE', 'UTF-16LE', invalid: :replace
+      previous_encoding = @encoding
+      @encoding = 'UTF-16LE'
+      retry unless @encoding == previous_encoding
     end
 
-    def update_comments!(text)
-      TagLib::FileRef.open(@path.to_s) do |file|
-        file.tag.comments = text
+    def append_comments!(text)
+      open_song_file(@path.to_s) do |file|
+        comment = file.tag.comment
+        comment = comment.to_s + text.to_s + ' '
+        file.tag.comment = comment
+        file.save
       end
     end
 
     def comments
-      TagLib::FileRef.open(@path.to_s) do |file|
-        file.tag.comments = text
+      comments = nil
+      open_song_file(@path.to_s) do |file|
+        comments = file.tag.comment
       end
+      comments
+    end
+
+    def open_song_file(filename, &block)
+      nil
     end
   end
 end

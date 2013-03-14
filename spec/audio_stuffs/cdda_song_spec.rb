@@ -14,7 +14,7 @@ describe AudioStuffs::CddaSong do
   end
 
   it "can write comments" do
-    song.update_comments!(song.name + ' ' + song.analysis)
+    song.append_comments!(song.name + ' ' + song.analysis)
     song.comments.should match(song.analysis)
   end
 end

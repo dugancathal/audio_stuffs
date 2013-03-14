@@ -21,7 +21,8 @@ ARGV.each do |check_dir|
       cdda_dir.metadata_files.each do |file|
         cdda_file = AudioStuffs::CddaFile.from_file(file)
         cdda_file.songs.each do |cdda_song|
-          cdda_song.update_comment! cdda_file.analyses[cdda_song.name]
+          next unless File.exist?(path)
+          cdda_song.append_comments!(cdda_song.name + ' ' + cdda_song.analysis)
         end
       end
     end
