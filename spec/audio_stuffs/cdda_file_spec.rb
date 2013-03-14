@@ -5,7 +5,7 @@ describe AudioStuffs::CddaFile do
   let(:aucdtect_file) { AudioStuffs::CddaFile.from_file(FIXTURE_PATH.join('Folder.auCDtect.txt')) }
 
   let(:audiochecker_regex) { Regexp.new( 'AUDIOCHECKER'.encode('UTF-8') ) }
-  let(:aucdtect_regex) { Regexp.new( 'auCDtect'.encode('UTF-16LE') ) }
+  let(:aucdtect_regex) { Regexp.new( 'auCDtect'.encode('UTF-8') ) }
 
   it 'delegates to correct type from filename' do
     audiochecker_file.should be_a_kind_of(AudioStuffs::AudioCheckerFile)

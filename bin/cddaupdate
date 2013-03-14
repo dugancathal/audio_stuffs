@@ -19,9 +19,10 @@ ARGV.each do |check_dir|
     cdda_dir = AudioStuffs::CddaDir.new(path)
     if cdda_dir.valid?
       cdda_dir.metadata_files.each do |file|
+        puts file
         cdda_file = AudioStuffs::CddaFile.from_file(file)
         cdda_file.songs.each do |cdda_song|
-          next unless File.exist?(path)
+          next unless File.exist?(File.join(path, cdda_song.name))
           cdda_song.append_comments!(cdda_song.name + ' ' + cdda_song.analysis)
         end
       end

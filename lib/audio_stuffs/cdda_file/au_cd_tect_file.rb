@@ -4,8 +4,9 @@ module AudioStuffs
   class AuCdTectFile < CddaFile
 
     FILE_ENCODING = 'UTF-16LE'
+    TARGET_ENCODING = 'UTF-8'
 
-    @@song_analysis_regex = Regexp.new( 'FILE:\s+(\w+).*?CDDA\s+(\d+%)'.encode(FILE_ENCODING), Regexp::MULTILINE )
+    @@song_analysis_regex = Regexp.new( 'FILE:\s+(\w+\.\w+).*?CDDA\s+(\d+%)'.encode(TARGET_ENCODING), Regexp::MULTILINE )
 
     private
 
@@ -14,7 +15,7 @@ module AudioStuffs
     end
 
     def decode(text)
-      text.encode!('UTF-16LE', 'UTF-16LE', :invalid => :replace)
+      text.encode!(TARGET_ENCODING, FILE_ENCODING, :invalid => :replace)
     end
   end
 end

@@ -17,10 +17,6 @@ module AudioStuffs
 
     def name
       @path.basename.to_s.encode @encoding, @encoding, invalid: :replace
-    rescue ArgumentError
-      previous_encoding = @encoding
-      @encoding = 'UTF-16LE'
-      retry unless @encoding == previous_encoding
     end
 
     def append_comments!(text)
