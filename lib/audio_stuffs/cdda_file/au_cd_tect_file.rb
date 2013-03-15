@@ -6,7 +6,7 @@ module AudioStuffs
     FILE_ENCODING = 'UTF-16LE'
     TARGET_ENCODING = 'UTF-8'
 
-    @@song_analysis_regex = Regexp.new( 'FILE:\s+(\w+\.\w+).*?CDDA\s+(\d+%)'.encode(TARGET_ENCODING), Regexp::MULTILINE )
+    @@song_analysis_regex = Regexp.new( 'FILE:\s+([[:graph:]]+\.[[:graph:]]+).*?CDDA\s+(\d+%)'.encode(TARGET_ENCODING), Regexp::MULTILINE )
 
     private
 
