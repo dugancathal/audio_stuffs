@@ -10,11 +10,11 @@ describe AudioStuffs::CddaSong do
   end
 
   it "knows its CDDA analysis" do
-    song.analysis.should eq('100%')
+    song.analysis.percent.should eq('100%')
   end
 
   it "can write comments" do
-    song.append_comments!(song.name + ' ' + song.analysis)
-    song.comments.should match(song.analysis)
+    song.append_comments!(song.name + ' ' + song.analysis.type + ' ' + song.analysis.percent)
+    song.comments.should match(song.analysis.percent)
   end
 end

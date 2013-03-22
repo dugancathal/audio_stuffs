@@ -5,7 +5,7 @@ module AudioStuffs
 
     FILE_ENCODING = 'UTF-8'
 
-    @@song_analysis_regex = Regexp.new( '-=-\s+(.*)\s+-=-.*\((.*)\)'.encode(FILE_ENCODING) )
+    @@song_analysis_regex = Regexp.new( '-=-\s+(.*)\s+-=-\s+(.*?)\s+(?:\((.*?)\))?'.encode(FILE_ENCODING) )
 
     private
 
