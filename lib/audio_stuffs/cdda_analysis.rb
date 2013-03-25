@@ -6,7 +6,7 @@ module AudioStuffs
       @type, @percent = if percentage
         [type.encode('UTF-8'), percentage.encode('UTF-8')]
       else
-        ['', type.encode('UTF-8')]
+        ['UNKNOWN', type.encode('UTF-8')]
       end
     end
 

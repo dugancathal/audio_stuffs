@@ -1,3 +1,4 @@
+require 'audio_stuffs/cdda_analysis'
 module AudioStuffs
   class CddaSong
     attr_reader :analysis
@@ -17,6 +18,10 @@ module AudioStuffs
 
     def name
       @path.basename.to_s.encode @encoding, @encoding, invalid: :replace
+    end
+    
+    def directory
+      @path.dirname.to_s.encode @encoding, @encoding, invalid: :replace
     end
 
     def append_comments!(text)
@@ -38,6 +43,12 @@ module AudioStuffs
 
     def open_song_file(filename, &block)
       nil
+    end
+
+    def db_id
+      AudioStuffs::Song.in_directory(directory)
+        .where(name: name)
+        .first_or_create 
     end
   end
 end

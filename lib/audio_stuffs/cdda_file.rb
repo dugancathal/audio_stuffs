@@ -1,17 +1,15 @@
 module AudioStuffs
   class CddaFile
     attr_reader :text
-    def initialize(filename)
-      @file = Pathname(filename)
-      @text = @file.read
-      decode(@text)
+    def initialize(filename, encoding = 'UTF-8')
+      raise "File reading must be implemented in a subclass"
     end
 
     # Delegates the creation of the File to one of the subclasses
     def self.from_file(filename)
       case Pathname(filename).basename.to_s
-      when /audiochecker/i then AudioStuffs::AudioCheckerFile.new(filename)
-      when /auCDtect/i then AudioStuffs::AuCdTectFile.new(filename)
+      when /audiochecker/i then AudioStuffs::AudioCheckerFile.new(filename, 'UTF-8')
+      when /auCDtect/i then AudioStuffs::AuCdTectFile.new(filename, 'UTF-16LE')
       else raise "Unknown File Type. Got: #{filename.basename}"
       end
     end

@@ -2,10 +2,19 @@ require 'audio_stuffs/cdda_file'
 
 module AudioStuffs
   class AudioCheckerFile < CddaFile
+    def initialize(filename, encoding = 'UTF-8')
+      @file = Pathname(filename)
+      @text = @file.open {|f| f.each_byte.map {|byte| "" << byte}}.join
+      decode(@text)
+    end
 
     FILE_ENCODING = 'UTF-8'
 
-    @@song_analysis_regex = Regexp.new( '-=-\s+(.*)\s+-=-\s+(.*?)\s+(?:\((.*?)\))?'.encode(FILE_ENCODING) )
+    @@song_analysis_regex = Regexp.new( '-=-\s+([[:graph:]]+)\s+-=-\s+([[:graph:]]+?)\s+(?:\(([[:graph:]]+?)\))?'.encode(FILE_ENCODING) )
+
+    def file_type
+      'audiochecker'
+    end
 
     private
 
@@ -14,7 +23,7 @@ module AudioStuffs
     end
 
     def decode(text)
-      text.encode!('UTF-8', 'UTF-8', :invalid => :replace)
+      text.encode!(FILE_ENCODING, FILE_ENCODING, :invalid => :replace)
     end
   end
 end

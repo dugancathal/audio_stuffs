@@ -1,0 +1,60 @@
+#!/usr/bin/env ruby
+#
+# TJ Taylor 2013
+#
+# Recurse through every supplied argument and feed them into the DB specified by
+# the database stated in config/database.yml.  Change the environment with something
+# like
+# 
+#   AUDIO_ENV=production bin/dbsync
+#
+require 'audio_stuffs'
+require 'logger'
+require 'find'
+
+def args_valid?
+  ARGV.size >= 1
+end
+
+unless args_valid?
+  exit 1
+end
+
+STDOUT.sync = true
+logger = Logger.new STDOUT
+logger.level = Logger::INFO
+logger.progname = 'CDDA DBSync'
+
+AudioStuffs.initialize!
+
+ARGV.each do |check_dir|
+  Find.find(check_dir) do |path|
+    next unless File.directory?(path)
+
+    cdda_dir = AudioStuffs::CddaDir.new(path)
+    if cdda_dir.valid?
+
+      logger.info "Working on #{path}"
+
+      cdda_dir.metadata_files.each do |file|
+
+        logger.info "Parsing through #{file}"
+
+        cdda_file = AudioStuffs::CddaFile.from_file(file)
+        cdda_file.songs.each do |cdda_song|
+
+          logger.debug "Looking at #{cdda_song.name}"
+
+          unless File.exist?(Pathname(path) + cdda_song.name)
+            logger.warn "Song missing! #{cdda_song.name}"
+          end
+
+          AudioStuffs::SongAnalysis.where(song_id: cdda_song.db_id,
+            analysis_type: cdda_song.analysis.type,
+            file_type: cdda_file.file_type
+          ).first_or_create result: cdda_song.analysis.percent
+        end
+      end
+    end
+  end
+end

@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = AudioStuffs::VERSION
   gem.authors       = ["TJ Taylor"]
   gem.email         = ["Thomas_Taylor2@cable.comcast.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Audio Stuffs for Phil}
+  gem.summary       = %q{Scripts for managing Phil's audio collection}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
@@ -18,6 +18,8 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency 'taglib-ruby'
+  gem.add_dependency 'activerecord'
 
   gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'sqlite3'
 end
